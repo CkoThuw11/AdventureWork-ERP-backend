@@ -109,21 +109,23 @@ async def general_exception_handler(request: Request, exc: Exception) -> JSONRes
 
 
 # Health check endpoint
-@app.get("/health", tags=["health"])
-async def health_check() -> dict[str, str]:
-    """Health check endpoint.
+@app.get("/health", tags=["Health"])
+async def health_check():
+    """
+    Health check endpoint.
     
     Returns:
-        Health status.
+        dict: Health status
     """
-    return {"status": "healthy", "version": settings.app.version}
+    return {
+        "status": "healthy",
+        "version": "0.1.0",
+        "environment": settings.app.environment
+    }
 
 
-# Include routers
-app.include_router(users.router, prefix=settings.api.v1_prefix)
-
-
-if __name__ == "__main__":
+def main():
+    """Main entry point for running the application via console script."""
     import uvicorn
 
     uvicorn.run(
