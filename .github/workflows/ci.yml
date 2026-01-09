@@ -22,21 +22,17 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('pyproject.toml') }}
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/pyproject.toml') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -e ".[dev]"
 
-    - name: Run Ruff
-      run: ruff check .
-
-    - name: Run Black
-      run: black --check .
-
-    - name: Run MyPy
-      run: mypy src/
+    - name: Run pre-commit
+      run: pre-commit run --all-files
 
   test:
     runs-on: ubuntu-latest
@@ -64,6 +60,14 @@ jobs:
       with:
         python-version: '3.11'
 
+    - name: Cache pip
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/pyproject.toml') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -78,7 +82,6 @@ jobs:
         DATABASE_PASSWORD: postgres
       run: |
         pytest
-
 
   build:
     runs-on: ubuntu-latest
