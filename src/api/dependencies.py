@@ -13,7 +13,9 @@ from src.infrastructure.database.connection import get_db
 from src.infrastructure.repositories.user_repository import UserRepository
 
 
-def get_user_repository(session: Annotated[AsyncSession, Depends(get_db)]) -> UserRepository:
+def get_user_repository(
+    session: Annotated[AsyncSession, Depends(get_db)],
+) -> UserRepository:
     """Get user repository instance.
 
     Args:
@@ -26,7 +28,7 @@ def get_user_repository(session: Annotated[AsyncSession, Depends(get_db)]) -> Us
 
 
 def get_user_service(
-    user_repo: Annotated[UserRepository, Depends(get_user_repository)]
+    user_repo: Annotated[UserRepository, Depends(get_user_repository)],
 ) -> UserService:
     """Get user service instance.
 
