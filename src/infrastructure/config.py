@@ -23,11 +23,13 @@ class DatabaseSettings(BaseSettings):
     @property
     def url(self) -> str:
         """Get the database connection URL.
-        
+
         Returns:
             PostgreSQL connection URL.
         """
-        return f"postgresql+asyncpg://{self.user}:{self.password}@{self.host}:{self.port}/{self.name}"
+        return (
+            f"postgresql+asyncpg://{self.user}:{self.password}@{self.host}:{self.port}/{self.name}"
+        )
 
 
 class AppSettings(BaseSettings):
@@ -54,7 +56,7 @@ class APISettings(BaseSettings):
     @property
     def cors_origins_list(self) -> list[str]:
         """Get CORS origins as a list.
-        
+
         Returns:
             List of allowed CORS origins.
         """

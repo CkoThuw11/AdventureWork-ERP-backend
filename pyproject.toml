@@ -6,6 +6,10 @@ build-backend = "setuptools.build_meta"
 name = "tinybigcorp-backend"
 version = "0.1.0"
 description = "TinyBigCorp Enterprise Backend - Clean Architecture with FastAPI"
+readme = "README.md"
+authors = [
+    {name = "anhhoangdev", email = "anhhoang.021203@gmail.com"},
+]
 requires-python = ">=3.11"
 dependencies = [
     "fastapi>=0.109.0",
@@ -17,6 +21,34 @@ dependencies = [
     "structlog>=24.1.0",
     "python-dotenv>=1.0.0",
 ]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Framework :: FastAPI",
+    "Typing :: Typed",
+]
+
+[project.urls]
+"Bug Tracker" = "https://github.com/CkoThuw11/AdventureWork-ERP-backend/issues"
+"Documentation" = "https://github.com/CkoThuw11/TinyBigCorp/tree/main/docs"
+"Source Code" = "https://github.com/CkoThuw11/AdventureWork-ERP-backend"
+Homepage = "https://github.com/CkoThuw11/AdventureWork-ERP-backend"
+
+[project.scripts]
+tinybigcorp-api = "src.api.main:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[tool.setuptools]
+include-package-data = true
 
 [project.optional-dependencies]
 dev = [
@@ -27,6 +59,7 @@ dev = [
     "black>=24.1.0",
     "mypy>=1.8.0",
     "httpx>=0.26.0",
+    "pre-commit>=3.6.0",
 ]
 
 [tool.ruff]
@@ -67,6 +100,7 @@ warn_unused_ignores = true
 warn_no_return = true
 follow_imports = "normal"
 ignore_missing_imports = false
+plugins = ["pydantic.mypy"]
 
 [[tool.mypy.overrides]]
 module = "asyncpg.*"

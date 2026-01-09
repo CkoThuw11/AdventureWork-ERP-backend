@@ -3,14 +3,13 @@
 This module creates and configures the FastAPI application.
 """
 
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
-from typing import AsyncGenerator
 
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from src.api.routes import users
 from src.domain.exceptions import DomainException
 from src.infrastructure.config import settings
 from src.infrastructure.logging.logger import configure_logging, get_logger
@@ -23,12 +22,12 @@ logger = get_logger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     """Application lifespan manager.
-    
+
     Handles startup and shutdown events.
-    
+
     Args:
         app: FastAPI application instance.
-        
+
     Yields:
         None
     """
@@ -61,11 +60,11 @@ app.add_middleware(
 @app.exception_handler(DomainException)
 async def domain_exception_handler(request: Request, exc: DomainException) -> JSONResponse:
     """Handle domain exceptions globally.
-    
+
     Args:
         request: The incoming request.
         exc: The domain exception.
-        
+
     Returns:
         JSON response with error details.
     """
@@ -85,11 +84,11 @@ async def domain_exception_handler(request: Request, exc: DomainException) -> JS
 @app.exception_handler(Exception)
 async def general_exception_handler(request: Request, exc: Exception) -> JSONResponse:
     """Handle unexpected exceptions globally.
-    
+
     Args:
         request: The incoming request.
         exc: The exception.
-        
+
     Returns:
         JSON response with error details.
     """
@@ -110,21 +109,17 @@ async def general_exception_handler(request: Request, exc: Exception) -> JSONRes
 
 # Health check endpoint
 @app.get("/health", tags=["Health"])
-async def health_check():
+async def health_check() -> dict[str, str]:
     """
     Health check endpoint.
-    
+
     Returns:
         dict: Health status
     """
-    return {
-        "status": "healthy",
-        "version": "0.1.0",
-        "environment": settings.app.environment
-    }
+    return {"status": "healthy", "version": "0.1.0", "environment": settings.app.env}
 
 
-def main():
+def main() -> None:
     """Main entry point for running the application via console script."""
     import uvicorn
 

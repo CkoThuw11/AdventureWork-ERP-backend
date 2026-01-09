@@ -13,7 +13,7 @@ from src.infrastructure.database.connection import Base
 
 class UserModel(Base):
     """SQLAlchemy ORM model for users table.
-    
+
     This model maps to the database table and should NOT be exposed
     outside the Infrastructure layer. Always map to domain entities.
     """

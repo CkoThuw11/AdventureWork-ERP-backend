@@ -54,7 +54,7 @@ class User:
     id: Optional[int]
     email: str
     username: str
-    
+
     def deactivate(self) -> None:
         """Business rule: Users can be deactivated."""
         self.is_active = False
@@ -74,7 +74,7 @@ class User:
 class UserService:
     def __init__(self, user_repo: IUserRepository):
         self._user_repo = user_repo
-    
+
     async def create_user(self, command: CreateUserCommand) -> UserDto:
         # Orchestrate the use case
         user = User(...)
@@ -97,7 +97,7 @@ class UserService:
 class UserRepository(IUserRepository):
     def __init__(self, session: AsyncSession):
         self._session = session
-    
+
     async def create(self, user: User) -> User:
         # Map to ORM model
         model = UserModel(...)
@@ -269,7 +269,7 @@ async def create_product(...):
 class InMemoryUserRepository(IUserRepository):
     def __init__(self):
         self.users = []
-    
+
     async def create(self, user: User) -> User:
         user.id = len(self.users) + 1
         self.users.append(user)
@@ -278,15 +278,15 @@ class InMemoryUserRepository(IUserRepository):
 async def test_create_user():
     repo = InMemoryUserRepository()
     service = UserService(repo)
-    
+
     command = CreateUserCommand(
         email="test@example.com",
         username="testuser",
         full_name="Test User"
     )
-    
+
     result = await service.create_user(command)
-    
+
     assert result.email == "test@example.com"
     assert len(repo.users) == 1
 ```
@@ -297,7 +297,7 @@ async def test_create_user():
 # tests/integration/test_user_repository.py
 async def test_user_repository_create(db_session):
     repo = UserRepository(db_session)
-    
+
     user = User(
         id=None,
         email="test@example.com",
@@ -307,9 +307,9 @@ async def test_user_repository_create(db_session):
         created_at=datetime.utcnow(),
         updated_at=datetime.utcnow()
     )
-    
+
     created = await repo.create(user)
-    
+
     assert created.id is not None
     assert created.email == "test@example.com"
 ```

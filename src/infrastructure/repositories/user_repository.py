@@ -3,8 +3,6 @@
 This module contains the concrete implementation of IUserRepository.
 """
 
-from typing import List, Optional
-
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -15,14 +13,14 @@ from src.infrastructure.database.models import UserModel
 
 class UserRepository(IUserRepository):
     """Concrete implementation of IUserRepository using SQLAlchemy.
-    
+
     This repository handles all database operations for users.
     It maps between ORM models and domain entities.
     """
 
     def __init__(self, session: AsyncSession) -> None:
         """Initialize the user repository.
-        
+
         Args:
             session: The database session.
         """
@@ -30,10 +28,10 @@ class UserRepository(IUserRepository):
 
     def _to_entity(self, model: UserModel) -> User:
         """Map ORM model to domain entity.
-        
+
         Args:
             model: The UserModel ORM instance.
-            
+
         Returns:
             User domain entity.
         """
@@ -49,10 +47,10 @@ class UserRepository(IUserRepository):
 
     def _to_model(self, entity: User) -> UserModel:
         """Map domain entity to ORM model.
-        
+
         Args:
             entity: The User domain entity.
-            
+
         Returns:
             UserModel ORM instance.
         """
@@ -66,19 +64,19 @@ class UserRepository(IUserRepository):
             updated_at=entity.updated_at,
         )
 
-    async def get_by_id(self, user_id: int) -> Optional[User]:
+    async def get_by_id(self, user_id: int) -> User | None:
         """Retrieve a user by ID."""
         result = await self._session.execute(select(UserModel).where(UserModel.id == user_id))
         model = result.scalar_one_or_none()
         return self._to_entity(model) if model else None
 
-    async def get_by_email(self, email: str) -> Optional[User]:
+    async def get_by_email(self, email: str) -> User | None:
         """Retrieve a user by email address."""
         result = await self._session.execute(select(UserModel).where(UserModel.email == email))
         model = result.scalar_one_or_none()
         return self._to_entity(model) if model else None
 
-    async def get_by_username(self, username: str) -> Optional[User]:
+    async def get_by_username(self, username: str) -> User | None:
         """Retrieve a user by username."""
         result = await self._session.execute(
             select(UserModel).where(UserModel.username == username)
@@ -86,7 +84,7 @@ class UserRepository(IUserRepository):
         model = result.scalar_one_or_none()
         return self._to_entity(model) if model else None
 
-    async def list_all(self, skip: int = 0, limit: int = 100) -> List[User]:
+    async def list_all(self, skip: int = 0, limit: int = 100) -> list[User]:
         """List all users with pagination."""
         result = await self._session.execute(select(UserModel).offset(skip).limit(limit))
         models = result.scalars().all()

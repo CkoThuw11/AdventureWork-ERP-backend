@@ -13,7 +13,7 @@ from src.infrastructure.config import settings
 
 def configure_logging() -> None:
     """Configure structured logging with Structlog.
-    
+
     This sets up JSON-formatted logging with context awareness.
     """
     # Configure standard logging
@@ -35,9 +35,11 @@ def configure_logging() -> None:
             structlog.processors.StackInfoRenderer(),
             structlog.processors.format_exc_info,
             structlog.processors.UnicodeDecoder(),
-            structlog.processors.JSONRenderer()
-            if settings.log.format == "json"
-            else structlog.dev.ConsoleRenderer(),
+            (
+                structlog.processors.JSONRenderer()
+                if settings.log.format == "json"
+                else structlog.dev.ConsoleRenderer()
+            ),
         ],
         wrapper_class=structlog.stdlib.BoundLogger,
         context_class=dict,
@@ -48,10 +50,10 @@ def configure_logging() -> None:
 
 def get_logger(name: str) -> structlog.stdlib.BoundLogger:
     """Get a configured logger instance.
-    
+
     Args:
         name: The logger name (usually __name__).
-        
+
     Returns:
         Configured structlog logger.
     """

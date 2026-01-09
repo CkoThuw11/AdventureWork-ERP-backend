@@ -3,7 +3,7 @@
 This module handles database connection and session management.
 """
 
-from typing import AsyncGenerator
+from collections.abc import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
@@ -38,9 +38,9 @@ AsyncSessionLocal = async_sessionmaker(
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     """Get database session.
-    
+
     This is a dependency that provides a database session to routes.
-    
+
     Yields:
         AsyncSession: Database session.
     """

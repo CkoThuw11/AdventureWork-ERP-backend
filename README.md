@@ -34,28 +34,37 @@ Handles external communication (HTTP, CLI, etc.).
 ### 1. Create Virtual Environment
 ```bash
 python -m venv venv
-venv\Scripts\activate  # Windows
-# source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate      # Windows
+# source venv/bin/activate # Linux/Mac
 ```
 
 ### 2. Install Dependencies
+We use `pip` with `pyproject.toml` for dependency management. Install in editable mode with dev dependencies:
+
 ```bash
-pip install -r requirements-dev.txt
+pip install -e ".[dev]"
 ```
 
-### 3. Configure Environment
+### 3. Setup Git Hooks
+Initialize pre-commit hooks to automatically lint and format code before committing:
+
+```bash
+pre-commit install
+```
+
+### 4. Configure Environment
 ```bash
 copy .env.example .env
 # Edit .env with your configuration
 ```
 
-### 4. Start Database
+### 5. Start Database
 ```bash
 # From project root
 docker-compose up -d
 ```
 
-### 5. Run the Server
+### 6. Run the Server
 ```bash
 uvicorn src.api.main:app --reload
 ```
@@ -79,19 +88,29 @@ pytest tests/test_user_service.py
 
 ## 🔍 Code Quality
 
-### Linting
-```bash
-ruff check .
-```
+We use a suite of tools to maintain code quality. These run automatically via pre-commit, but you can run them manually:
 
-### Formatting
+### Linting & Formatting
+**Ruff** handles both linting and import sorting. **Black** handles code formatting.
+
 ```bash
+# Fix linting issues
+ruff check . --fix
+
+# Format code
 black .
 ```
 
 ### Type Checking
+We use **mypy** for static type checking.
+
 ```bash
 mypy src/
+```
+
+### Run All Checks
+```bash
+pre-commit run --all-files
 ```
 
 ## 📝 Adding a New Feature
